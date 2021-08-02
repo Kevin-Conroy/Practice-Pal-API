@@ -2,9 +2,8 @@ const express = require("express");
 const exerciseRouter = express.Router();
 const bodyParser = express.json();
 const cookieParser = require("cookie-parser");
-const ExerciseService = require("./exercsie-service");
-
-exerciseRouter.use(cookieParser());
+const ExerciseService = require("./exercise-service");
+//exerciseRouter.use(cookieParser());
 
 const serializeExercise = (exercise) => ({
   userId: exercise.user_id,
@@ -14,6 +13,7 @@ const serializeExercise = (exercise) => ({
 });
 
 exerciseRouter.route("/exercises").post(bodyParser, (req, res, next) => {
+    console.log(req.body)
   for (const field of ["currentTempo", "goalTempo"]) {
     if (!req.body[field]) {
       return res.status(400).send({

@@ -8,6 +8,14 @@ const userRouter = require("./user-router");
 const exerciseRouter = require("./exercise-router");
 const knex = require('knex');
 const app = express();
+const cors = require('cors');
+const {CLIENT_ORIGIN} = require('./config');
+
+app.use(
+    cors({
+        origin: CLIENT_ORIGIN
+    })
+);
 
  const morganOption = (NODE_ENV === 'production')
     ? 'tiny'
