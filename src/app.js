@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
 const { NODE_ENV } = require('./config');
-const profileRouter = require("./profile-router");
+const userRouter = require("./user-router");
 const exerciseRouter = require("./exercise-router");
 const knex = require('knex');
 const app = express();
@@ -16,13 +16,25 @@ const app = express();
 app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
-app.use(profileRouter);
+app.use(userRouter);
 app.use(exerciseRouter);
 app.use(express.json());
+
+const knexInstance = knex({
+  client: "pg",
+  connection: process.env.DB_URL,
+});
+
+const db = knex({
+  client: "pg",
+  connection: DB_URL,
+});
 
 app.get("/", (req, res) => {
   res.send("Hello, world!");
 });
+
+app.set('db', db)
 
 app.use(function errorHandler(error, req, res, next) {
   let response;

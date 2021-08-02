@@ -1,9 +1,23 @@
 const express = require("express");
 const app = express();
-const profileRouter = require("./profile-router");
+const userRouter = require("./user-router");
 const exerciseRouter = require("./exercise-router")
+const knex = require('knex')
+require('dotenv').config()
+const { PORT, DB_URL } = require("./config");
 
-const PORT = process.env.PORT || 3000;
+
+const knexInstance = knex({
+  client: "pg",
+  connection: process.env.DB_URL,
+});
+
+const db = knex({
+  client: "pg",
+  connection: DB_URL,
+});
+
+app.set('db', db)
 
 app.get("/", (req, res) => {
   res.send("Hello, world!");
@@ -13,7 +27,7 @@ app.get("/api/*", (req, res) => {
   res.json({ ok: true });
 });
 
-app.use(profileRouter);
+app.use(userRouter);
 app.use(exerciseRouter);
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
