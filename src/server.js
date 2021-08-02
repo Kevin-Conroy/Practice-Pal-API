@@ -1,5 +1,5 @@
 const express = require("express");
-const app = express();
+const app = require("./app");
 const userRouter = require("./user-router");
 const exerciseRouter = require("./exercise-router")
 const knex = require('knex')

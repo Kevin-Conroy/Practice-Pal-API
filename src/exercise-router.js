@@ -6,6 +6,7 @@ const ExerciseService = require("./exercise-service");
 //exerciseRouter.use(cookieParser());
 
 const serializeExercise = (exercise) => ({
+  id: exercise.id,
   userId: exercise.user_id,
   name: exercise.name,
   currentTempo: exercise.current_tempo,
@@ -38,12 +39,13 @@ exerciseRouter.route("/exercises").post(bodyParser, (req, res, next) => {
 });
 
 exerciseRouter.route("/edittempos/:id").patch(bodyParser, (req, res, next) => {
-  const { id, currentTempo, goalTempo } = req.body;
+  
   const exerciseToUpdate = {
-    id: id,
-    current_tempo: currentTempo,
-    goal_tempo: goalTempo,
+    id: req.params.id,
+    current_tempo: req.body.currentTempo,
+    goal_tempo: req.body.goalTempo,
   };
+  const { currentTempo, goalTempo } = req.body;
   if (!currentTempo && !goalTempo) {
     return res.status(400).json({
       error: {
