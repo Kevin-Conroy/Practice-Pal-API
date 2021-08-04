@@ -8,7 +8,7 @@ const userRouter = require("./user-router");
 const exerciseRouter = require("./exercise-router");
 const knex = require('knex');
 const app = express();
-const {CLIENT_ORIGIN, PORT, DB_URL} = require('./config');
+const {CLIENT_ORIGIN, PORT, DATABASE_URL} = require('./config');
 
 
 app.use(
@@ -30,12 +30,12 @@ app.use(express.json());
 
 const knexInstance = knex({
   client: "pg",
-  connection: process.env.DB_URL,
+  connection: process.env.DATABASE_URL,
 });
 
 const db = knex({
   client: "pg",
-  connection: DB_URL,
+  connection: DATABASE_URL,
 });
 
 app.get("/", (req, res) => {

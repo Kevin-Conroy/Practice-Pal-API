@@ -43,7 +43,7 @@ userRouter.route("/user").post(bodyParser, (req, res, next) => {
       res
         .status(201)
         .location(`/user`)
-        //.json({...serializeUser(user) });
+
         .json({ ...serializeUser(user), token });
     })
     .catch(next);
