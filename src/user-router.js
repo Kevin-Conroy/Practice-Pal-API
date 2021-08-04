@@ -80,8 +80,7 @@ userRouter.route("/login").post(bodyParser, (req, res, next) => {
       next(error);
     });
 });
-    //.catch((error) => {
-      //return next(error);
-
+//.catch((error) => {
+//return next(error);
 
 module.exports = userRouter;

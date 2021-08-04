@@ -4,20 +4,7 @@ const userRouter = require("./user-router");
 const exerciseRouter = require("./exercise-router")
 const knex = require('knex')
 require('dotenv').config()
-const { PORT, DB_URL } = require("./config");
-
-
-const knexInstance = knex({
-  client: "pg",
-  connection: process.env.DB_URL,
-});
-
-const db = knex({
-  client: "pg",
-  connection: DB_URL,
-});
-
-app.set('db', db)
+const { PORT } = require("./config");
 
 app.get("/", (req, res) => {
   res.send("Hello, world!");
