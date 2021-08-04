@@ -13,8 +13,8 @@ const serializeExercise = (exercise) => ({
   goalTempo: exercise.goal_tempo,
 });
 
-exerciseRouter.route("/exercises").post(bodyParser, (req, res, next) => {
-    console.log(req.body)
+exerciseRouter.route("/exercises/").post(bodyParser, (req, res, next) => {
+  console.log(req.body);
   for (const field of ["currentTempo", "goalTempo"]) {
     if (!req.body[field]) {
       return res.status(400).send({
@@ -32,14 +32,22 @@ exerciseRouter.route("/exercises").post(bodyParser, (req, res, next) => {
     .then((exercise) => {
       res
         .status(201)
-        .location(`/exercises`)
+        .location(`/exercises/`)
         .json({ ...serializeExercise(exercise) });
     })
     .catch(next);
 });
 
+exerciseRouter.route("/exercises/:user_id").get((req, res, next) => {
+  const { user_id } = req.params;
+  ExerciseService.getMyExercises(req.app.get("db"), user_id)
+    .then((exercises) => {
+      res.json(exercises.map(serializeExercise));
+    })
+    .catch(next);
+});
+
 exerciseRouter.route("/edittempos/:id").patch(bodyParser, (req, res, next) => {
-  
   const exerciseToUpdate = {
     id: req.params.id,
     current_tempo: req.body.currentTempo,

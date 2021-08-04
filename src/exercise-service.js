@@ -1,9 +1,10 @@
 const ExerciseService = {
   insertExercise(knex, newExercise) {
-    console.log(newExercise);
+    console.log("line 3 in API" + newExercise);
     return knex
       .insert({
         user_id: newExercise.userId,
+
         name: newExercise.name,
         current_tempo: newExercise.currentTempo,
         goal_tempo: newExercise.goalTempo,
@@ -28,7 +29,7 @@ const ExerciseService = {
   },
 
   getMyExercises(knex, user_id) {
-    return knex.from("exercises").select("*").where("user_id", user_id).first();
+    return knex.from("exercises").select("*").where("user_id", user_id);
   },
 };
 
