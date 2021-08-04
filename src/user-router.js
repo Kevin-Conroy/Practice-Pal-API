@@ -16,6 +16,14 @@ const serializeUser = (user) => ({
   password: user.password,
 });
 
+const serializeExercise = (exercise) => ({
+  id: exercise.id,
+  userId: exercise.user_id,
+  name: exercise.name,
+  currentTempo: exercise.current_tempo,
+  goalTempo: exercise.goal_tempo,
+});
+
 userRouter.route("/user").post(bodyParser, (req, res, next) => {
   //const newUser = { username, password };
   for (const field of ["username", "password"]) {
@@ -57,15 +65,13 @@ userRouter.route("/login").post(bodyParser, (req, res, next) => {
         (exercises) => {
           const token = jwt.sign({ userId: user.id }, JWTSECRET);
           return res.send({
-            exercises,
             successfulLogin: true,
             userId: user.id,
             token,
+            exercises: exercises.map(serializeExercise),
           });
         }
       );
-
-      //tres.send({  });
     })
     .catch((error) => {
       return next(error);
