@@ -46,14 +46,16 @@ userRouter.route("/user").post(bodyParser, (req, res, next) => {
 
         .json({ ...serializeUser(user), token });
     })
-    .catch(next);
+    .catch((error) => {
+      console.log(error);
+      next(error);
+    });
 });
 
 userRouter.route("/login").post(bodyParser, (req, res, next) => {
   const { username, password } = req.body;
   UserService.getByUsername(req.app.get("db"), username)
     .then((user) => {
-      
       if (!user) {
         return res.send({ successfulLogin: false, field: "username" });
       }
@@ -74,8 +76,12 @@ userRouter.route("/login").post(bodyParser, (req, res, next) => {
       );
     })
     .catch((error) => {
-      return next(error);
+      console.log(error);
+      next(error);
     });
 });
+    //.catch((error) => {
+      //return next(error);
+
 
 module.exports = userRouter;
