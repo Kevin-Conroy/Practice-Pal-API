@@ -1,6 +1,5 @@
 const ExerciseService = {
   insertExercise(knex, newExercise) {
-    console.log("line 3 in API" + newExercise);
     return knex
       .insert({
         user_id: newExercise.userId,
@@ -14,7 +13,6 @@ const ExerciseService = {
       .then((rows) => rows[0]);
   },
   updateExercise(knex, id, exerciseToUpdate) {
-    console.log(exerciseToUpdate);
     return knex("exercises")
       .where({ id })
       .update({

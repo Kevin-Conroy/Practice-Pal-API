@@ -25,7 +25,6 @@ const serializeExercise = (exercise) => ({
 });
 
 userRouter.route("/user").post(bodyParser, (req, res, next) => {
-  //const newUser = { username, password };
   for (const field of ["username", "password"]) {
     if (!req.body[field]) {
       return res.status(400).send({
@@ -80,7 +79,5 @@ userRouter.route("/login").post(bodyParser, (req, res, next) => {
       next(error);
     });
 });
-//.catch((error) => {
-//return next(error);
 
 module.exports = userRouter;

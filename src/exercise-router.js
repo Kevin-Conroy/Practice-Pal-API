@@ -14,7 +14,6 @@ const serializeExercise = (exercise) => ({
 });
 
 exerciseRouter.route("/exercises/").post(bodyParser, (req, res, next) => {
-  console.log(req.body);
   for (const field of ["currentTempo", "goalTempo"]) {
     if (!req.body[field]) {
       return res.status(400).send({
