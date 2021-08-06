@@ -54,6 +54,7 @@ app.use(function errorHandler(error, req, res, next) {
   }
   res.status(500).json(response);
 });
-
+app.use(userRouter);
+app.use(exerciseRouter);
 
 module.exports = app;

@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const UserService = require("./user-service");
 const ExerciseService = require("./exercise-service");
+const { DatabaseError } = require("pg");
 
 userRouter.use(cookieParser());
 
@@ -24,7 +25,7 @@ const serializeExercise = (exercise) => ({
   goalTempo: exercise.goal_tempo,
 });
 
-userRouter.route("/user").post(bodyParser, (req, res, next) => {
+userRouter.route("/user").post(bodyParser, async (req, res, next) => {
   for (const field of ["username", "password"]) {
     if (!req.body[field]) {
       return res.status(400).send({
@@ -32,23 +33,26 @@ userRouter.route("/user").post(bodyParser, (req, res, next) => {
       });
     }
   }
-  const newProfile = {
-    username: req.body.username,
-    password: req.body.password,
-  };
-  UserService.insertUser(req.app.get("db"), newProfile)
-    .then((user) => {
-      const token = jwt.sign({ userId: user.id }, JWTSECRET);
-      res
-        .status(201)
-        .location(`/user`)
+  try {
+  const existingUser = await UserService.getByUsername(req.app.get("db"), req.body.username)
+if (existingUser) {
+  return res.status(400).send("Username is already taken, please try another one")
+}
 
-        .json({ ...serializeUser(user), token });
-    })
-    .catch((error) => {
-      console.log(error);
-      next(error);
-    });
+    const newProfile = {
+      username: req.body.username,
+      password: req.body.password,
+    };
+    const user = await UserService.insertUser(req.app.get("db"), newProfile);
+    const token = jwt.sign({ userId: user.id }, JWTSECRET);
+    return res
+      .status(201)
+      .location(`/user`)
+      .json({ ...serializeUser(user), token });
+  } catch(error) {
+    console.log(error);
+    next(error);
+  };
 });
 
 userRouter.route("/login").post(bodyParser, (req, res, next) => {
@@ -81,3 +85,33 @@ userRouter.route("/login").post(bodyParser, (req, res, next) => {
 });
 
 module.exports = userRouter;
+
+/*
+userRouter.route("/user").post(bodyParser, async (req, res, next) => {
+  for (const field of ["username", "password"]) {
+    if (!req.body[field]) {
+      return res.status(400).send({
+        error: { message: `'${field}' is required` },
+      });
+    }
+    }
+    UserService.getByUsername(req.app.get("db"), async `${req.body.username}`)
+  const newProfile = {
+    username: req.body.username,
+    password: req.body.password,
+  };
+  UserService.insertUser(req.app.get("db"), newProfile)
+    .then((user) => {
+      const token = jwt.sign({ userId: user.id }, JWTSECRET);
+      res
+        .status(201)
+        .location(`/user`)
+
+        .json({ ...serializeUser(user), token });
+    })
+    .catch((error) => {
+      console.log(error);
+      next(error);
+    });
+});
+*/
