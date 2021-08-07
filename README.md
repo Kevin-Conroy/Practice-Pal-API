@@ -62,12 +62,3 @@ The back-end of this project was built using Node.js, Knex, and Postgres. CORS w
 ## Upcoming Features
 
 Based on user feedback, I am in the process of implementing a custom exercise field in which user's can add as many of their own custom exercises as they wish, in addition to using the exercises initially provided. This will be available soon in version 2.0.
-
-  
-=======
-Practice Pal
-https://practice-pal-client-kevin-conroy.vercel.app/
-
-As a busy drummer & guitarist I always seem to let my practice goals slip through the cracks. Practice Pal will let you choose your instrument, and then provide a list of exercises to practice, as well as your current tempo for each exercise & your goal tempo for each exercise. You can build yourself an entire practice routine right in your profile!
-
-The client was built using React, Javascript, HTML & CSS. The API was built with Express, Node, and PostgreSQL.
